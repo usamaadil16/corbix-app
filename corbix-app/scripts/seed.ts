@@ -24,23 +24,41 @@ async function run() {
 
   const supabase = createAdminClient();
 
-  await supabase
-    .from("services")
-    .upsert(services, { onConflict: "slug", ignoreDuplicates: false });
+  function check(label: string, error: { message: string } | null) {
+    if (error) {
+      throw new Error(`${label}: ${error.message}`);
+    }
+    console.log(`${label}: ok`);
+  }
 
-  await supabase.from("programs").delete().gt("sort_order", -1);
-  await supabase.from("programs").insert(programs);
+  check(
+    "services",
+    (
+      await supabase
+        .from("services")
+        .upsert(services, { onConflict: "slug", ignoreDuplicates: false })
+    ).error,
+  );
 
-  await supabase.from("page_content").upsert(pageContent, {
-    onConflict: "page_key,section_key",
-    ignoreDuplicates: false,
-  });
+  check("programs (clear)", (await supabase.from("programs").delete().gt("sort_order", -1)).error);
+  check("programs", (await supabase.from("programs").insert(programs)).error);
 
-  await supabase.from("case_studies").delete().gt("sort_order", -1);
-  await supabase.from("case_studies").insert(caseStudies);
+  check(
+    "page_content",
+    (
+      await supabase.from("page_content").upsert(pageContent, {
+        onConflict: "page_key,section_key",
+        ignoreDuplicates: false,
+      })
+    ).error,
+  );
 
-  await supabase.from("careers").delete().gt("sort_order", -1);
-  await supabase.from("careers").insert(careers);
+  check("case_studies (clear)", (await supabase.from("case_studies").delete().gt("sort_order", -1)).error);
+  check("case_studies", (await supabase.from("case_studies").insert(caseStudies)).error);
+
+  check("careers (clear)", (await supabase.from("careers").delete().gt("sort_order", -1)).error);
+  check("careers", (await supabase.from("careers").insert(careers)).error);
+
   console.log("Seed complete.");
 }
 
