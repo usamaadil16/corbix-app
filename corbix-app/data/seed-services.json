@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "digital-marketing",
+    "title": "Digital Marketing",
+    "description": "Crafting compelling brand narratives and performance-driven campaigns.",
+    "visible": true,
+    "has_page": true,
+    "sort_order": 1
+  },
+  {
+    "slug": "commercial-brokerage",
+    "title": "Commercial Brokerage",
+    "description": "Orchestrating high-value trade agreements across all platforms.",
+    "visible": true,
+    "has_page": true,
+    "sort_order": 2
+  },
+  {
+    "slug": "general-trading",
+    "title": "General Trading",
+    "description": "Curating a dynamic global supply chain.",
+    "visible": true,
+    "has_page": true,
+    "sort_order": 3
+  },
+  {
+    "slug": "strategic-advisory",
+    "title": "Strategic Advisory & Market Intelligence",
+    "description": "Comprehensive market intelligence and strategic advisory.",
+    "visible": true,
+    "has_page": true,
+    "sort_order": 4
+  },
+  {
+    "slug": "copywriting-brand-protection",
+    "title": "Global Copywriting & Brand Protection",
+    "description": "Localized copy and international trademark registration.",
+    "visible": true,
+    "has_page": true,
+    "sort_order": 5
+  },
+  {
+    "slug": "global-mobility",
+    "title": "Global Mobility",
+    "description": "Immigration and investor residencies with professional discretion.",
+    "visible": true,
+    "has_page": true,
+    "sort_order": 6
+  },
+  {
+    "slug": "real-estate-advisory",
+    "title": "Real Estate Advisory",
+    "description": "Elite market intelligence for high-net-worth acquisitions.",
+    "visible": true,
+    "has_page": false,
+    "sort_order": 7
+  },
+  {
+    "slug": "pr-copyright",
+    "title": "PR & Copyright",
+    "description": "Architecting corporate prestige and securing creative assets.",
+    "visible": true,
+    "has_page": false,
+    "sort_order": 8
+  },
+  {
+    "slug": "translation-services",
+    "title": "Translation Services",
+    "description": "High-fidelity interpretation and certified document translation.",
+    "visible": true,
+    "has_page": false,
+    "sort_order": 9
+  },
+  {
+    "slug": "telemarketing",
+    "title": "Telemarketing",
+    "description": "Targeted tele-campaigns that drive customer acquisition.",
+    "visible": true,
+    "has_page": false,
+    "sort_order": 10
+  },
+  {
+    "slug": "specialized-consulting",
+    "title": "Specialized Consulting",
+    "description": "Niche technical advisory for complex operational challenges.",
+    "visible": true,
+    "has_page": false,
+    "sort_order": 11
+  }
+]

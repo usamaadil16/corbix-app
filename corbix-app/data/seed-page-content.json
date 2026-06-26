@@ -1,0 +1,54 @@
+[
+  {
+    "page_key": "home",
+    "section_key": "hero_headline",
+    "content": {
+      "text": "A Name You Trust."
+    },
+    "visible": true
+  },
+  {
+    "page_key": "home",
+    "section_key": "slogan",
+    "content": {
+      "text": "Your single unified partner for local growth and global expansion."
+    },
+    "visible": true
+  },
+  {
+    "page_key": "home",
+    "section_key": "brand_story",
+    "content": {
+      "title": "COR / BRIX",
+      "text": "COR stands for core trust and commitment. BRIX represents building blocks for durable growth."
+    },
+    "visible": true
+  },
+  {
+    "page_key": "home",
+    "section_key": "vision",
+    "content": {
+      "text": "We combine strategic precision and operational execution to help businesses scale with confidence."
+    },
+    "visible": true
+  },
+  {
+    "page_key": "about",
+    "section_key": "body",
+    "content": {
+      "title": "Built for Ambitious Operators",
+      "text": "Corbrix exists to remove friction from growth. We align market strategy, regulatory clarity, and execution support under one partner."
+    },
+    "visible": true
+  },
+  {
+    "page_key": "contact",
+    "section_key": "details",
+    "content": {
+      "email": "hello@corbrix.com",
+      "phone": "+971 00 000 0000",
+      "address": "Dubai, United Arab Emirates"
+    },
+    "visible": true
+  }
+]

@@ -1,0 +1,22 @@
+[
+  { "country": "United Arab Emirates", "region": "Middle East", "type": "Residence", "minimum_capital": "AED 750,000", "key_benefit": "Long-term residency through real-estate investment.", "sort_order": 1, "visible": true },
+  { "country": "United States", "region": "North America", "type": "Residence", "minimum_capital": "USD 800,000", "key_benefit": "EB-5 pathway to permanent residence.", "sort_order": 2, "visible": true },
+  { "country": "Antigua and Barbuda", "region": "Caribbean", "type": "Citizenship", "minimum_capital": "USD 230,000", "key_benefit": "Visa-free travel and fast family inclusion.", "sort_order": 3, "visible": true },
+  { "country": "Portugal", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 250,000", "key_benefit": "EU residency with eventual citizenship track.", "sort_order": 4, "visible": true },
+  { "country": "Malta", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 150,000", "key_benefit": "Robust due-process and Schengen mobility.", "sort_order": 5, "visible": true },
+  { "country": "Greece", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 250,000", "key_benefit": "Golden Visa with flexible stay requirements.", "sort_order": 6, "visible": true },
+  { "country": "Spain", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 500,000", "key_benefit": "Residency linked to high-quality EU lifestyle.", "sort_order": 7, "visible": true },
+  { "country": "Italy", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 250,000", "key_benefit": "Investor visa with strategic market access.", "sort_order": 8, "visible": true },
+  { "country": "Cyprus", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 300,000", "key_benefit": "Fast-track residency and favorable tax regime.", "sort_order": 9, "visible": true },
+  { "country": "Hungary", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 250,000", "key_benefit": "Efficient residency program with low entry point.", "sort_order": 10, "visible": true },
+  { "country": "Latvia", "region": "Europe", "type": "Residence", "minimum_capital": "EUR 250,000", "key_benefit": "EU residence permit through property options.", "sort_order": 11, "visible": true },
+  { "country": "Dominica", "region": "Caribbean", "type": "Citizenship", "minimum_capital": "USD 200,000", "key_benefit": "Established citizenship by investment framework.", "sort_order": 12, "visible": true },
+  { "country": "Grenada", "region": "Caribbean", "type": "Citizenship", "minimum_capital": "USD 235,000", "key_benefit": "E-2 treaty advantages for U.S. business access.", "sort_order": 13, "visible": true },
+  { "country": "Saint Kitts and Nevis", "region": "Caribbean", "type": "Citizenship", "minimum_capital": "USD 250,000", "key_benefit": "One of the longest-running CBI programs globally.", "sort_order": 14, "visible": true },
+  { "country": "Saint Lucia", "region": "Caribbean", "type": "Citizenship", "minimum_capital": "USD 240,000", "key_benefit": "Flexible contribution and investment routes.", "sort_order": 15, "visible": true },
+  { "country": "Vanuatu", "region": "Asia Pacific", "type": "Citizenship", "minimum_capital": "USD 130,000", "key_benefit": "Fast processing for citizenship applicants.", "sort_order": 16, "visible": true },
+  { "country": "Canada", "region": "North America", "type": "Residence", "minimum_capital": "CAD 200,000", "key_benefit": "Provincial entrepreneur pathways for families.", "sort_order": 17, "visible": true },
+  { "country": "United Kingdom", "region": "Europe", "type": "Residence", "minimum_capital": "GBP 200,000", "key_benefit": "Business-led visa options and global credibility.", "sort_order": 18, "visible": true },
+  { "country": "Singapore", "region": "Asia Pacific", "type": "Residence", "minimum_capital": "SGD 2,500,000", "key_benefit": "Premier financial hub with stable governance.", "sort_order": 19, "visible": true },
+  { "country": "New Zealand", "region": "Asia Pacific", "type": "Residence", "minimum_capital": "NZD 5,000,000", "key_benefit": "High-quality destination with investor pathways.", "sort_order": 20, "visible": true }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Business Development Manager",
+    "department": "Growth",
+    "location": "Dubai",
+    "description": "Own pipeline generation, strategic partnerships, and enterprise outreach.",
+    "visible": true,
+    "sort_order": 1
+  },
+  {
+    "title": "Immigration Program Analyst",
+    "department": "Global Mobility",
+    "location": "Dubai",
+    "description": "Support investor program analysis, due-diligence preparation, and client advisory teams.",
+    "visible": true,
+    "sort_order": 2
+  },
+  {
+    "title": "Marketing Strategist",
+    "department": "Digital Marketing",
+    "location": "Remote",
+    "description": "Lead positioning strategy, campaign architecture, and performance reporting.",
+    "visible": true,
+    "sort_order": 3
+  }
+]
