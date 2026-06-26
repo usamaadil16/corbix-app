@@ -1,4 +1,13 @@
-import "dotenv/config";
+import { config } from "dotenv";
+import ws from "ws";
+
+config({ path: ".env.local" });
+config();
+
+if (!globalThis.WebSocket) {
+  (globalThis as unknown as { WebSocket: unknown }).WebSocket = ws;
+}
+
 import services from "../data/seed-services.json";
 import programs from "../data/seed-programs.json";
 import pageContent from "../data/seed-page-content.json";
