@@ -18,6 +18,9 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       touchMultiplier: 1.5,
     });
 
+    // Expose the instance so nav/buttons can trigger smooth programmatic scrolls
+    (window as unknown as { lenis?: Lenis }).lenis = lenis;
+
     lenis.on("scroll", ScrollTrigger.update);
 
     const raf = (time: number) => {
@@ -29,6 +32,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => {
       gsap.ticker.remove(raf);
       lenis.destroy();
+      delete (window as unknown as { lenis?: Lenis }).lenis;
     };
   }, []);
 

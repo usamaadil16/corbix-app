@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BrickWorld } from "@/components/public/home/BrickWorld";
 import { getServiceHref } from "@/lib/cms/get-services";
+import { smoothScrollTo } from "@/lib/scroll";
 import type { Service } from "@/types/database";
 
 type HomeExperienceProps = {
@@ -30,6 +31,7 @@ export function HomeExperience({
   const root = useRef<HTMLDivElement | null>(null);
   const journeyRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const servicesScrollRef = useRef<ScrollTrigger | null>(null);
   const [flight, setFlight] = useState(false);
 
   useEffect(() => {
@@ -83,6 +85,8 @@ export function HomeExperience({
               { autoAlpha: 0, y: 40, scale: 0.96, stagger: 0.06, duration: 0.4 },
               pos + 0.1,
             );
+            // Mark the scroll position where services are fully revealed
+            tl.addLabel("services", pos + 0.8);
           }
 
           if (i < panels.length - 1) {
@@ -91,6 +95,8 @@ export function HomeExperience({
 
           pos += dwell;
         });
+
+        servicesScrollRef.current = tl.scrollTrigger ?? null;
       } else {
         // Static fallback: stacked sections with simple play-once reveals
         gsap.utils.toArray<HTMLElement>("[data-panel]").forEach((node) => {
@@ -116,6 +122,15 @@ export function HomeExperience({
     return () => ctx.revert();
   }, [flight]);
 
+  const handleExploreServices = (event: React.MouseEvent) => {
+    const st = servicesScrollRef.current;
+    if (flight && st) {
+      event.preventDefault();
+      smoothScrollTo(st.labelToScroll("services"));
+    }
+    // Static layout falls back to the native #services anchor.
+  };
+
   const heroPanel = (
     <div className="mx-auto w-full max-w-6xl px-4">
       <p className="text-xs uppercase tracking-[0.3em] text-muted">Corbrix</p>
@@ -125,6 +140,7 @@ export function HomeExperience({
       <p className="mt-6 max-w-2xl text-lg text-muted">{slogan}</p>
       <Link
         href="#services"
+        onClick={handleExploreServices}
         className="pointer-events-auto mt-10 inline-flex w-fit rounded-lg border border-accent/40 px-5 py-2.5 text-sm text-accent transition-colors hover:bg-accent/10"
       >
         Explore Services
