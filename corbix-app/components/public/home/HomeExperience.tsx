@@ -287,7 +287,7 @@ export function HomeExperience({
           <div className="pointer-events-none sticky top-0 flex h-screen items-center overflow-hidden">
             <div
               data-panel="hero"
-              className="absolute inset-0 flex items-end justify-center pb-24"
+              className="absolute inset-0 flex items-end justify-center pb-40"
             >
               {heroContent}
             </div>
