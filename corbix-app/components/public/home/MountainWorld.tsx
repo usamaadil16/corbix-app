@@ -127,27 +127,49 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       }
     }
 
-    // --- Bright-blue cube gateway ---
-    const cubeGeo = new THREE.BoxGeometry(8.5, 8.5, 8.5);
-    const cubeMat = new THREE.MeshPhysicalMaterial({
+    // --- Cube gateway built from a grid of small 3D cubes ---
+    const GRID = 4;
+    const CUBE_SIZE = 8.5;
+    const cell = CUBE_SIZE / GRID;
+    const smallGeo = new THREE.BoxGeometry(cell * 0.78, cell * 0.78, cell * 0.78);
+    const cubeMat = new THREE.MeshStandardMaterial({
       color: BLUE,
       emissive: BLUE_DEEP,
-      emissiveIntensity: 0.4,
-      metalness: 0,
-      roughness: 0.06,
-      transmission: 1, // glass: refracts the scene behind it
-      thickness: 4,
-      ior: 1.45,
-      attenuationColor: new THREE.Color(BLUE),
-      attenuationDistance: 6,
-      transparent: true,
-      opacity: 1,
-      side: THREE.DoubleSide,
+      emissiveIntensity: 0.6,
+      roughness: 0.3,
+      metalness: 0.35,
     });
-    const cube = new THREE.Mesh(cubeGeo, cubeMat);
+    const CUBE_COUNT = GRID * GRID * GRID;
+    const cube = new THREE.InstancedMesh(smallGeo, cubeMat, CUBE_COUNT);
     cube.position.set(0, 6, CUBE_Z);
     scene.add(cube);
-    disposables.push(cubeGeo, cubeMat);
+    disposables.push(smallGeo, cubeMat, cube);
+
+    const cubeBase: THREE.Vector3[] = [];
+    const cubeScatter: THREE.Vector3[] = [];
+    const cubeDummy = new THREE.Object3D();
+    for (let x = 0; x < GRID; x += 1) {
+      for (let y = 0; y < GRID; y += 1) {
+        for (let z = 0; z < GRID; z += 1) {
+          const p = new THREE.Vector3(
+            (x - (GRID - 1) / 2) * cell,
+            (y - (GRID - 1) / 2) * cell,
+            (z - (GRID - 1) / 2) * cell,
+          );
+          cubeBase.push(p);
+          const dir = p.clone();
+          if (dir.lengthSq() === 0) dir.set(0, 1, 0);
+          cubeScatter.push(dir.normalize());
+        }
+      }
+    }
+    cubeBase.forEach((p, i) => {
+      cubeDummy.position.copy(p);
+      cubeDummy.scale.setScalar(1);
+      cubeDummy.updateMatrix();
+      cube.setMatrixAt(i, cubeDummy.matrix);
+    });
+    cube.instanceMatrix.needsUpdate = true;
 
     const cubeGlow = new THREE.PointLight(BLUE, 4, 150, 2);
     cubeGlow.position.copy(cube.position);
@@ -309,10 +331,21 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       cube.rotation.y = t * 0.26; // horizontal spin only
 
       const dissolve = smoothstep(progress, 0.15, 0.28);
-      cubeMat.opacity = 1 - dissolve;
-      cubeMat.transmission = 1 - dissolve;
-      cube.visible = dissolve < 0.99;
-      cubeMat.emissiveIntensity = 0.35 + dissolve * 1.2 + Math.sin(t * 2) * 0.15;
+      cube.visible = dissolve < 0.995;
+      // The small cubes fly apart and shrink as the gateway dissolves.
+      const cubeSpread = dissolve * 16;
+      const cubeShrink = clamp(1 - dissolve, 0.001, 1);
+      for (let i = 0; i < CUBE_COUNT; i += 1) {
+        cubeDummy.position
+          .copy(cubeBase[i])
+          .addScaledVector(cubeScatter[i], cubeSpread);
+        cubeDummy.rotation.set(t * 0.6 * dissolve, t * 0.6 * dissolve, 0);
+        cubeDummy.scale.setScalar(cubeShrink);
+        cubeDummy.updateMatrix();
+        cube.setMatrixAt(i, cubeDummy.matrix);
+      }
+      cube.instanceMatrix.needsUpdate = true;
+      cubeMat.emissiveIntensity = 0.55 + dissolve * 1.2 + Math.sin(t * 2) * 0.15;
       cubeGlow.intensity = 3 + dissolve * 5 + Math.sin(t * 2) * 1;
 
       const spread = dissolve * 18;
