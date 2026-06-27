@@ -66,6 +66,7 @@ export type Program = {
   country: string;
   region: string;
   type: ProgramType;
+  service_type: string;
   minimum_capital: string;
   key_benefit: string;
   sort_order: number;

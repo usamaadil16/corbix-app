@@ -29,6 +29,7 @@ function withinRange(value: number, range: Range) {
 export function ProgramExplorer({ programs }: ProgramExplorerProps) {
   const [region, setRegion] = useState("All");
   const [type, setType] = useState<"All" | "Citizenship" | "Residence">("All");
+  const [serviceType, setServiceType] = useState("All");
   const [range, setRange] = useState<Range>("all");
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -37,18 +38,32 @@ export function ProgramExplorer({ programs }: ProgramExplorerProps) {
     [programs],
   );
 
+  const serviceTypes = useMemo(
+    () => [
+      "All",
+      ...new Set(
+        programs
+          .map((program) => program.service_type)
+          .filter((value): value is string => Boolean(value)),
+      ),
+    ],
+    [programs],
+  );
+
   const filtered = useMemo(() => {
     return programs.filter((program) => {
       if (region !== "All" && program.region !== region) return false;
       if (type !== "All" && program.type !== type) return false;
+      if (serviceType !== "All" && program.service_type !== serviceType)
+        return false;
       if (!withinRange(parseAmount(program.minimum_capital), range)) return false;
       return true;
     });
-  }, [programs, range, region, type]);
+  }, [programs, range, region, serviceType, type]);
 
   return (
     <section className="space-y-5">
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         <Select value={region} onChange={(event) => setRegion(event.target.value)}>
           {regions.map((entry) => (
             <option key={entry} value={entry}>
@@ -66,6 +81,18 @@ export function ProgramExplorer({ programs }: ProgramExplorerProps) {
           <option value="Citizenship">Citizenship</option>
           <option value="Residence">Residence</option>
         </Select>
+        {serviceTypes.length > 1 ? (
+          <Select
+            value={serviceType}
+            onChange={(event) => setServiceType(event.target.value)}
+          >
+            {serviceTypes.map((entry) => (
+              <option key={entry} value={entry}>
+                {entry === "All" ? "All Service Types" : entry}
+              </option>
+            ))}
+          </Select>
+        ) : null}
         <Select
           value={range}
           onChange={(event) => setRange(event.target.value as Range)}
@@ -98,6 +125,11 @@ export function ProgramExplorer({ programs }: ProgramExplorerProps) {
                   <Badge tone="accent">{program.type}</Badge>
                 </div>
                 <p className="mt-2 text-sm text-muted">{program.region}</p>
+                {program.service_type ? (
+                  <p className="mt-1 text-xs uppercase tracking-wide text-muted">
+                    {program.service_type}
+                  </p>
+                ) : null}
                 {isOpen ? (
                   <div className="mt-3 space-y-2 text-sm">
                     <p className="text-white">

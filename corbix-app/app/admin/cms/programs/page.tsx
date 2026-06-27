@@ -23,6 +23,7 @@ export default async function CmsProgramsPage() {
           { key: "country", label: "Country" },
           { key: "region", label: "Region" },
           { key: "type", label: "Type" },
+          { key: "service_type", label: "Service Type" },
           { key: "minimum_capital", label: "Minimum Capital" },
           { key: "key_benefit", label: "Key Benefit", multiline: true },
           { key: "sort_order", label: "Sort Order" },
