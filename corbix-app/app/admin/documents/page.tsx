@@ -23,7 +23,7 @@ export default async function DocumentsPage() {
         <h1 className="font-display text-4xl text-white">Documents</h1>
         <Link
           href="/admin/documents/new"
-          className="inline-flex h-11 items-center rounded-lg bg-accent px-5 text-sm font-semibold text-white transition-colors hover:bg-accent/90"
+          className="inline-flex h-11 items-center rounded-lg bg-accent px-5 text-sm font-semibold text-background transition-colors hover:bg-accent/90"
         >
           New Document
         </Link>

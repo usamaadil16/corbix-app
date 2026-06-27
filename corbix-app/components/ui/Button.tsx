@@ -6,7 +6,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  primary: "bg-accent text-white hover:bg-accent/90",
+  primary: "bg-accent text-background hover:bg-accent/90",
   outline: "border border-accent text-accent hover:bg-accent/10",
   ghost: "text-muted hover:text-white",
 };

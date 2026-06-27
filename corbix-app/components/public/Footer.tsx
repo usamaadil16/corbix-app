@@ -14,7 +14,7 @@ export function Footer() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex h-11 items-center rounded-lg bg-accent px-5 text-sm font-semibold text-white transition-colors hover:bg-accent/90"
+            className="inline-flex h-11 items-center rounded-lg bg-accent px-5 text-sm font-semibold text-background transition-colors hover:bg-accent/90"
           >
             Start a Conversation
           </Link>

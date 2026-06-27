@@ -227,7 +227,7 @@ export function HomeExperience({
             </p>
             <Link
               href="/contact"
-              className="pointer-events-auto inline-flex h-11 items-center rounded-lg bg-accent px-6 text-sm font-semibold text-white transition-colors hover:bg-accent/90"
+              className="pointer-events-auto inline-flex h-11 items-center rounded-lg bg-accent px-6 text-sm font-semibold text-background transition-colors hover:bg-accent/90"
             >
               Start a Conversation
             </Link>
