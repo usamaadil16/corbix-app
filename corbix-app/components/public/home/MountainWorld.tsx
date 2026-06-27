@@ -130,7 +130,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     }
 
     // --- Bright-blue cube gateway ---
-    const cubeGeo = new THREE.BoxGeometry(12, 12, 12);
+    const cubeGeo = new THREE.BoxGeometry(8, 8, 8);
     const cubeMat = new THREE.MeshStandardMaterial({
       color: BLUE,
       emissive: BLUE_DEEP,
@@ -301,8 +301,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
 
       // Cube grows, then dissolves into blue particles as we enter it.
       const approach = clamp(progress / (CUBE_PHASE * 0.55), 0, 1);
-      cube.scale.setScalar(lerp(0.85, 1.85, approach));
-      cube.rotation.x = t * 0.18;
+      cube.scale.setScalar(lerp(0.8, 1.5, approach));
       cube.rotation.y = t * 0.26;
 
       const dissolve = smoothstep(progress, 0.15, 0.28);
