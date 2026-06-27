@@ -106,13 +106,13 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     disposables.push(circleTex);
 
     // --- Water floor (rippling, lightly reflective blue plane) ---
-    const waterGeo = new THREE.PlaneGeometry(520, 760, 48, 72);
+    const waterGeo = new THREE.PlaneGeometry(520, 760, 72, 104);
     const waterMat = new THREE.MeshStandardMaterial({
       color: WATER_COLOR,
       emissive: 0x04122a,
-      emissiveIntensity: 0.6,
-      metalness: 0.35,
-      roughness: 0.25,
+      emissiveIntensity: 0.55,
+      metalness: 0.5,
+      roughness: 0.18,
     });
     const water = new THREE.Mesh(waterGeo, waterMat);
     water.rotation.x = -Math.PI / 2;
@@ -382,13 +382,16 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       lookTarget.set(0, 4, camZ - 30);
       camera.lookAt(lookTarget);
 
-      // Water ripples.
+      // Water ripples + waves (layered sine bands at different scales/speeds).
       for (let i = 0; i < waterPos.count; i += 1) {
         const x = waterPos.getX(i);
         const y = waterPos.getY(i);
         const wave =
-          Math.sin(x * 0.12 + t * 1.1) * 0.5 +
-          Math.cos(y * 0.16 + t * 1.4) * 0.5;
+          Math.sin(x * 0.16 + t * 1.2) * 0.8 +
+          Math.cos(y * 0.2 + t * 1.5) * 0.8 +
+          Math.sin((x + y) * 0.09 + t * 0.8) * 0.55 +
+          Math.sin((x - y) * 0.13 - t * 1.05) * 0.4 +
+          Math.sin(x * 0.5 + y * 0.4 + t * 2.4) * 0.18; // fine chop
         waterPos.setZ(i, wave);
       }
       waterPos.needsUpdate = true;
