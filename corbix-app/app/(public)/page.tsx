@@ -11,7 +11,10 @@ export default async function HomePage() {
   const content = await getPageContent("home");
   const services = await getServices();
 
-  const heroHeadline = asText(content.hero_headline?.text, "A Name You Trust.");
+  const heroHeadline = asText(
+    content.hero_headline?.text,
+    "We build the future of real estate",
+  );
   const slogan = asText(
     content.slogan?.text,
     "Your single unified partner for local growth and global expansion.",
