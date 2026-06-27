@@ -130,7 +130,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     }
 
     // --- Bright-blue cube gateway ---
-    const cubeGeo = new THREE.BoxGeometry(8, 8, 8);
+    const cubeGeo = new THREE.BoxGeometry(8.5, 8.5, 8.5);
     const cubeMat = new THREE.MeshStandardMaterial({
       color: BLUE,
       emissive: BLUE_DEEP,
@@ -233,7 +233,8 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     const positions = new Float32Array(P_COUNT * 3);
     for (let i = 0; i < P_COUNT; i += 1) {
       positions[i * 3] = rand(-45, 45);
-      positions[i * 3 + 1] = rand(-6, 44);
+      // Hug the water surface (water sits at y = -2 with small ripples).
+      positions[i * 3 + 1] = rand(-1.9, 0.4);
       positions[i * 3 + 2] = rand(-260, 40);
     }
     const particleGeo = new THREE.BufferGeometry();
@@ -301,8 +302,8 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
 
       // Cube grows, then dissolves into blue particles as we enter it.
       const approach = clamp(progress / (CUBE_PHASE * 0.55), 0, 1);
-      cube.scale.setScalar(lerp(0.8, 1.5, approach));
-      cube.rotation.y = t * 0.26;
+      cube.scale.setScalar(lerp(0.85, 1.85, approach));
+      cube.rotation.y = t * 0.26; // horizontal spin only
 
       const dissolve = smoothstep(progress, 0.15, 0.28);
       cubeMat.opacity = (1 - dissolve) * 0.9;
