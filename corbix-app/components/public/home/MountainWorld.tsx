@@ -70,6 +70,33 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     const clamp = THREE.MathUtils.clamp;
     const smoothstep = THREE.MathUtils.smoothstep;
 
+    // Soft round sprite so points render as dots, not squares.
+    const makeCircleTexture = () => {
+      const size = 64;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const g = canvas.getContext("2d");
+      if (g) {
+        const grad = g.createRadialGradient(
+          size / 2,
+          size / 2,
+          0,
+          size / 2,
+          size / 2,
+          size / 2,
+        );
+        grad.addColorStop(0, "rgba(255,255,255,1)");
+        grad.addColorStop(0.45, "rgba(255,255,255,0.85)");
+        grad.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = grad;
+        g.fillRect(0, 0, size, size);
+      }
+      return new THREE.CanvasTexture(canvas);
+    };
+    const circleTex = makeCircleTexture();
+    disposables.push(circleTex);
+
     // --- Water floor (rippling, lightly reflective blue plane) ---
     const waterGeo = new THREE.PlaneGeometry(520, 760, 48, 72);
     const waterMat = new THREE.MeshStandardMaterial({
@@ -128,7 +155,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     }
 
     // --- Cube gateway built from a grid of small 3D cubes ---
-    const GRID = 4;
+    const GRID = 6;
     const CUBE_SIZE = 8.5;
     const cell = CUBE_SIZE / GRID;
     const smallGeo = new THREE.BoxGeometry(cell * 0.78, cell * 0.78, cell * 0.78);
@@ -195,6 +222,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     const burstMat = new THREE.PointsMaterial({
       color: BLUE_SOFT,
       size: 0.6,
+      map: circleTex,
       transparent: true,
       opacity: 0,
       depthWrite: false,
@@ -241,6 +269,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     const trailParticleMat = new THREE.PointsMaterial({
       color: BLUE_SOFT,
       size: 0.5,
+      map: circleTex,
       transparent: true,
       opacity: 0.95,
       depthWrite: false,
@@ -253,8 +282,8 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     scene.add(trailParticles);
     disposables.push(trailParticleGeo, trailParticleMat);
 
-    // --- Ambient blue particles drifting through the canyon ---
-    const P_COUNT = 700;
+    // --- Ambient blue particles drifting across the water surface ---
+    const P_COUNT = 2600;
     const positions = new Float32Array(P_COUNT * 3);
     for (let i = 0; i < P_COUNT; i += 1) {
       positions[i * 3] = rand(-45, 45);
@@ -269,9 +298,10 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     );
     const particleMat = new THREE.PointsMaterial({
       color: BLUE_SOFT,
-      size: 0.26,
+      size: 0.32,
+      map: circleTex,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.85,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });
