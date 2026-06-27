@@ -259,7 +259,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     trailTubeGeo.setDrawRange(0, 0);
 
     // Particles riding the revealed portion of the trail.
-    const TRAIL_COUNT = 150;
+    const TRAIL_COUNT = 440;
     const trailPos = new Float32Array(TRAIL_COUNT * 3);
     const trailParticleGeo = new THREE.BufferGeometry();
     trailParticleGeo.setAttribute(
@@ -268,7 +268,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     );
     const trailParticleMat = new THREE.PointsMaterial({
       color: BLUE_SOFT,
-      size: 0.5,
+      size: 0.6,
       map: circleTex,
       transparent: true,
       opacity: 0.95,
@@ -398,10 +398,12 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
         Math.floor(trailIndexCount * valleyProgress),
       );
       for (let i = 0; i < TRAIL_COUNT; i += 1) {
-        const tt = (i / TRAIL_COUNT) * valleyProgress;
-        trailCurve.getPointAt(clamp(tt, 0, 1), tmp);
-        trailPos[i * 3] = tmp.x;
-        trailPos[i * 3 + 1] = tmp.y;
+        // Spread densely along the revealed portion and flow forward over time.
+        const along = ((i / TRAIL_COUNT + t * 0.04) % 1) * valleyProgress;
+        trailCurve.getPointAt(clamp(along, 0, 1), tmp);
+        // Small sideways/vertical jitter so they sit *around* the line, not on a single thread.
+        trailPos[i * 3] = tmp.x + Math.sin(i * 12.9 + t) * 0.18;
+        trailPos[i * 3 + 1] = tmp.y + Math.cos(i * 7.3 + t) * 0.18;
         trailPos[i * 3 + 2] = tmp.z;
       }
       trailParticleGeo.attributes.position.needsUpdate = true;
