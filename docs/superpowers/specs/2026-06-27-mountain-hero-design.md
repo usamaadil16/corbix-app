@@ -1,7 +1,12 @@
 # Mountain Parallax Hero — Design Spec
 
 Date: 2026-06-27
-Status: Approved (design), pending implementation plan
+Status: Superseded by the "3D Mountain World" revision below (see end of doc)
+
+> **Revision note:** The flat layered-SVG parallax hero described in this document
+> was built first, then replaced at the user's request with a 3D scroll-jacked
+> mountain world. The original spec is kept for history; the authoritative current
+> design is the **3D Mountain World Revision** section at the bottom.
 
 ## Summary
 
@@ -156,3 +161,62 @@ remaining sections receive their existing props.
 - Parallax travel values may need visual tuning; treated as constants, easy to
   adjust.
 - Removing `BrickWorld` is irreversible in-tree, but recoverable via git history.
+
+---
+
+# 3D Mountain World Revision (authoritative)
+
+Date: 2026-06-27
+
+The flat SVG hero was replaced with a 3D scroll-jacked journey themed as a
+mountain canyon, conceptually identical to the retired brick tunnel but with new
+art direction.
+
+## Decisions
+
+- **Structure:** Full scroll-jacked journey. The camera flies forward through the
+  3D scene while Hero → Brand → Vision → Services → Closing panels fade in/out as
+  HTML overlays (same mechanic as the old brick tunnel).
+- **Camera path:** Fly forward down a canyon/valley between mountain ridges toward
+  a large glowing **yellow cube** floating at the far center; the camera approaches
+  it as scroll progresses.
+- **Mountain style:** Stylized **low-poly faceted peaks** (dark grayscale,
+  `#2a2c33`) with a warm **gold** key light for rim lighting; a cool blue fill rim.
+- **Particles:** ~700 golden additive-blended points drifting through the canyon.
+- **Atmosphere:** Scene fog (`#05060a`, near 24 / far 130) so the yellow cube
+  emerges from the mist as the camera nears it.
+- **Fallback:** On mobile (`<768px`) and `prefers-reduced-motion`, no WebGL — the
+  page falls back to the flat `MountainHero` (SVG) + stacked Brand/Vision/Services/
+  Closing sections.
+
+## Components
+
+- `components/public/home/MountainWorld.tsx` (new) — Three.js scene: ground plane,
+  two canyon walls of low-poly `ConeGeometry` peaks, the emissive yellow
+  `BoxGeometry` cube + a pulsing point light, a golden `Points` particle field,
+  and a render loop. A `ScrollTrigger` on `[data-journey]` (`scrub`) drives a
+  `progress` value; the camera `z` lerps from `60` → `-102` toward the cube at
+  `z = -120`, always looking at the cube. Mounted only in flight mode; guards
+  against missing WebGL so it no-ops in jsdom. Rendered as a `fixed inset-0 z-0`
+  canvas behind the panels.
+- `components/public/home/HomeExperience.tsx` (rewrite) — restores flight mode:
+  when `flight` (desktop + motion-OK) renders `<MountainWorld/>` plus the sticky
+  panel stage over a `JOURNEY_SCREENS * 100vh` (`7`) tall `[data-journey]` section,
+  with the scrubbed panel timeline (services panel dwells longer, cards stagger,
+  `services` label for the Explore-Services jump). Otherwise renders the static
+  `MountainHero` + stacked sections.
+- `components/public/home/MountainHero.tsx` — retained as the static/mobile/
+  reduced-motion fallback hero.
+
+## Tech stack delta
+
+Re-introduces `three` for the homepage (it was already a dependency, still used by
+`ParticleHero.tsx`). GSAP ScrollTrigger + Lenis unchanged.
+
+## Verification
+
+- `tsc --noEmit` clean; `npm run build` succeeds (home route `/` compiles).
+- WebGL guard keeps the existing jsdom render tests valid (they exercise the static
+  fallback, where `MountainWorld` is not mounted).
+- Manual: desktop fly-through (camera approaches glowing cube, panels sequence,
+  particles drift), mobile + reduced-motion fall back to the flat hero.
