@@ -66,6 +66,12 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     blueRim.position.set(0, 14, -30);
     scene.add(blueRim);
 
+    // Two travelling side lights pool their reflection on the water beneath the
+    // left and right building rows (instead of a single glow under the cube).
+    const leftGlow = new THREE.PointLight(BLUE_SOFT, 6, 70, 2);
+    const rightGlow = new THREE.PointLight(BLUE_SOFT, 6, 70, 2);
+    scene.add(leftGlow, rightGlow);
+
     const disposables: Array<{ dispose: () => void }> = [];
     const rand = (min: number, max: number) => min + Math.random() * (max - min);
     const lerp = THREE.MathUtils.lerp;
@@ -408,8 +414,17 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
         cube.setMatrixAt(i, cubeDummy.matrix);
       }
       cube.instanceMatrix.needsUpdate = true;
-      cubeMat.emissiveIntensity = 0.55 + dissolve * 1.2 + Math.sin(t * 2) * 0.15;
-      cubeGlow.intensity = 5 + dissolve * 5 + Math.sin(t * 2) * 1;
+      // Cube lights itself mostly via emissive so it doesn't pool light on the
+      // water directly beneath it.
+      cubeMat.emissiveIntensity = 1 + dissolve * 1.2 + Math.sin(t * 2) * 0.15;
+      cubeGlow.intensity = 1.4 + dissolve * 3 + Math.sin(t * 2) * 0.4;
+
+      // Side reflections track the camera as it flies down the valley.
+      leftGlow.position.set(-15, 7, camZ - 10);
+      rightGlow.position.set(15, 7, camZ - 10);
+      const sideFlicker = 6 + Math.sin(t * 2.2) * 1;
+      leftGlow.intensity = sideFlicker;
+      rightGlow.intensity = sideFlicker;
 
       const spread = dissolve * 18;
       for (let i = 0; i < BURST; i += 1) {
