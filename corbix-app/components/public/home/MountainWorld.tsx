@@ -108,9 +108,10 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     // --- Water floor (rippling, lightly reflective blue plane) ---
     const waterGeo = new THREE.PlaneGeometry(520, 760, 72, 104);
     const waterMat = new THREE.MeshStandardMaterial({
-      color: WATER_COLOR,
+      color: 0xffffff,
+      vertexColors: true,
       emissive: 0x04122a,
-      emissiveIntensity: 0.55,
+      emissiveIntensity: 0.45,
       metalness: 0.5,
       roughness: 0.18,
     });
@@ -120,6 +121,21 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     scene.add(water);
     disposables.push(waterGeo, waterMat);
     const waterPos = waterGeo.attributes.position as THREE.BufferAttribute;
+
+    // Per-vertex colour banding so wave heights show as different blue shades.
+    const waterColorAttr = new THREE.BufferAttribute(
+      new Float32Array(waterPos.count * 3),
+      3,
+    );
+    waterGeo.setAttribute("color", waterColorAttr);
+    const waterShades = [
+      new THREE.Color(0x021327), // deepest troughs
+      new THREE.Color(WATER_COLOR),
+      new THREE.Color(0x0a5a9c),
+      new THREE.Color(0x2b9fe0),
+      new THREE.Color(0x6fe0ff), // brightest crests
+    ];
+    const waterTmpColor = new THREE.Color();
 
     // --- Bright-blue outlined building blocks lining the valley ---
     const buildingFaceMat = new THREE.MeshStandardMaterial({
@@ -383,6 +399,8 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       camera.lookAt(lookTarget);
 
       // Water ripples + waves (layered sine bands at different scales/speeds).
+      const waveMax = 2.7;
+      const lastShade = waterShades.length - 1;
       for (let i = 0; i < waterPos.count; i += 1) {
         const x = waterPos.getX(i);
         const y = waterPos.getY(i);
@@ -393,8 +411,21 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
           Math.sin((x - y) * 0.13 - t * 1.05) * 0.4 +
           Math.sin(x * 0.5 + y * 0.4 + t * 2.4) * 0.18; // fine chop
         waterPos.setZ(i, wave);
+
+        // Map wave height to a shade band, blending between adjacent shades.
+        const n = clamp((wave / waveMax) * 0.5 + 0.5, 0, 1) * lastShade;
+        const lo = Math.floor(n);
+        const hi = Math.min(lo + 1, lastShade);
+        waterTmpColor.copy(waterShades[lo]).lerp(waterShades[hi], n - lo);
+        waterColorAttr.setXYZ(
+          i,
+          waterTmpColor.r,
+          waterTmpColor.g,
+          waterTmpColor.b,
+        );
       }
       waterPos.needsUpdate = true;
+      waterColorAttr.needsUpdate = true;
       waterGeo.computeVertexNormals();
 
       // Cube grows, then dissolves into blue particles as we enter it.
