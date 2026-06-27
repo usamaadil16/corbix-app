@@ -15,7 +15,6 @@ const items = [
   { href: "/admin/cms/programs", label: "CMS / Programs" },
   { href: "/admin/cms/case-studies", label: "CMS / Case Studies" },
   { href: "/admin/cms/careers", label: "CMS / Careers" },
-  { href: "/admin/cms/media", label: "CMS / Media" },
 ];
 
 export function AdminSidebar() {

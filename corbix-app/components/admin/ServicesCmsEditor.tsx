@@ -26,13 +26,18 @@ export function ServicesCmsEditor({ initialServices }: Props) {
   };
 
   const create = async () => {
-    await fetch("/api/admin/cms/services", {
+    const response = await fetch("/api/admin/cms/services", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...draft, visible: true, has_page: false }),
     });
+    const data = (await response.json()) as { service?: Service };
+    if (data.service) {
+      setServices((prev) => [data.service as Service, ...prev]); // newest on top
+    } else {
+      await refresh();
+    }
     setDraft({ slug: "", title: "", description: "", sort_order: services.length + 2 });
-    await refresh();
   };
 
   const patch = async (service: Service) => {

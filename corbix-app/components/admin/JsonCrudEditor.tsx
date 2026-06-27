@@ -36,13 +36,29 @@ export function JsonCrudEditor({
     setRows(data[listKey] ?? []);
   };
 
+  const emptyDraft = () =>
+    fields.reduce<Row>((acc, field) => {
+      acc[field.key] = "";
+      return acc;
+    }, {});
+
   const create = async () => {
-    await fetch(endpoint, {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(draft),
     });
-    await refresh();
+    const data = (await response.json()) as Record<string, unknown>;
+    // The POST returns the created row under a resource key (e.g. { program }).
+    const created = Object.values(data).find(
+      (value) => value && typeof value === "object" && !Array.isArray(value),
+    ) as Row | undefined;
+    if (created) {
+      setRows((prev) => [created, ...prev]); // newest on top
+    } else {
+      await refresh();
+    }
+    setDraft(emptyDraft());
   };
 
   const update = async (row: Row) => {
