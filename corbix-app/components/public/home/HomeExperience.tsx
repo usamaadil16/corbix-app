@@ -146,7 +146,7 @@ export function HomeExperience({
       <Link
         href="#services"
         onClick={handleExploreServices}
-        className="pointer-events-auto mt-8 inline-flex w-fit rounded-lg border border-accent/40 px-5 py-2.5 text-sm text-accent transition-colors hover:bg-accent/10"
+        className="pointer-events-auto mt-8 inline-flex w-fit rounded-lg border border-white/60 px-5 py-2.5 text-sm text-white transition-colors hover:bg-white hover:text-background"
       >
         Explore Services
       </Link>
