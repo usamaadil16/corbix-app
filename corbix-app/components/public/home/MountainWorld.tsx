@@ -313,8 +313,8 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     const positions = new Float32Array(P_COUNT * 3);
     for (let i = 0; i < P_COUNT; i += 1) {
       positions[i * 3] = rand(-45, 45);
-      // Hug the water surface (water sits at y = -2 with small ripples).
-      positions[i * 3 + 1] = rand(-1.9, 0.4);
+      // Float in the air above the water (water sits at y = -2).
+      positions[i * 3 + 1] = rand(1, 30);
       positions[i * 3 + 2] = rand(-260, 40);
     }
     const particleGeo = new THREE.BufferGeometry();
