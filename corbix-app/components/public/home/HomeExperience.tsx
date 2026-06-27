@@ -71,7 +71,10 @@ export function HomeExperience({
         let pos = 0;
         panels.forEach((panel, i) => {
           const isServices = panel.dataset.panel === "services";
-          const dwell = isServices ? 2.4 : 1;
+          const isHero = panel.dataset.panel === "hero";
+          // Hero lingers through the cube approach/entry; services dwells so all
+          // cards reveal; the rest hand off as the camera flies the valley.
+          const dwell = isServices ? 2.4 : isHero ? 1.6 : 1;
 
           if (i > 0) {
             tl.to(panel, { autoAlpha: 1, y: 0, duration: 0.4 }, pos);

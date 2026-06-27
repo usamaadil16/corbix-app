@@ -220,3 +220,15 @@ Re-introduces `three` for the homepage (it was already a dependency, still used 
   fallback, where `MountainWorld` is not mounted).
 - Manual: desktop fly-through (camera approaches glowing cube, panels sequence,
   particles drift), mobile + reduced-motion fall back to the flat hero.
+
+## Revision 2 — cube gateway + rounded valley + trail
+
+- **Cube first:** the yellow cube sits in front of the valley (`z = 18`). The first
+  `25%` of scroll approaches it; the cube **scales up** and the camera **flies
+  through it** (emissive flash from inside). The remaining scroll travels the valley
+  (`z = 10 → -210`) where the content panels appear (hero lingers through the cube
+  entry, then brand/vision/services/closing sequence in the valley).
+- **Rounded mountains:** pointy `ConeGeometry` peaks replaced with smooth-shaded
+  `SphereGeometry` domes (half-buried) for rolling, rounded hills.
+- **Guiding trail:** a glowing `CatmullRomCurve3` + `TubeGeometry` line winds down
+  the valley floor, with ~140 gold particles flowing forward along it.
