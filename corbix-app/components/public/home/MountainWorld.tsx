@@ -246,17 +246,35 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       );
     }
     const trailCurve = new THREE.CatmullRomCurve3(trailPoints);
-    const trailTubeGeo = new THREE.TubeGeometry(trailCurve, 260, 0.14, 8, false);
-    const trailTubeMat = new THREE.MeshBasicMaterial({
-      color: BLUE,
-      transparent: true,
-      opacity: 0.8,
+    // The trail is a bundle of thin strands of varying diameter, slightly offset
+    // around the centre line for a layered, fibre-optic look.
+    const strandConfigs = [
+      { radius: 0.08, ox: 0, oy: 0, opacity: 0.95, color: 0xcdeeff },
+      { radius: 0.045, ox: 0.28, oy: 0.16, opacity: 0.6, color: BLUE },
+      { radius: 0.045, ox: -0.28, oy: -0.16, opacity: 0.6, color: BLUE },
+      { radius: 0.03, ox: 0.18, oy: -0.26, opacity: 0.45, color: BLUE_SOFT },
+      { radius: 0.03, ox: -0.2, oy: 0.24, opacity: 0.45, color: BLUE_SOFT },
+    ];
+    const trailStrandGeos: THREE.TubeGeometry[] = [];
+    strandConfigs.forEach((cfg) => {
+      const geo = new THREE.TubeGeometry(trailCurve, 260, cfg.radius, 6, false);
+      const mat = new THREE.MeshBasicMaterial({
+        color: cfg.color,
+        transparent: true,
+        opacity: cfg.opacity,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(cfg.ox, cfg.oy, 0);
+      scene.add(mesh);
+      geo.setDrawRange(0, 0);
+      trailStrandGeos.push(geo);
+      disposables.push(geo, mat);
     });
-    const trail = new THREE.Mesh(trailTubeGeo, trailTubeMat);
-    scene.add(trail);
-    disposables.push(trailTubeGeo, trailTubeMat);
-    const trailIndexCount = trailTubeGeo.index ? trailTubeGeo.index.count : 0;
-    trailTubeGeo.setDrawRange(0, 0);
+    const trailIndexCount = trailStrandGeos[0].index
+      ? trailStrandGeos[0].index.count
+      : 0;
 
     // Particles riding the revealed portion of the trail.
     const TRAIL_COUNT = 440;
@@ -406,10 +424,10 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
         0,
         1,
       );
-      trailTubeGeo.setDrawRange(
-        0,
-        Math.floor(trailIndexCount * valleyProgress),
-      );
+      const trailReveal = Math.floor(trailIndexCount * valleyProgress);
+      for (let s = 0; s < trailStrandGeos.length; s += 1) {
+        trailStrandGeos[s].setDrawRange(0, trailReveal);
+      }
       for (let i = 0; i < TRAIL_COUNT; i += 1) {
         // Spread densely along the revealed portion and flow forward over time.
         const along = ((i / TRAIL_COUNT + t * 0.04) % 1) * valleyProgress;
