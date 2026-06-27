@@ -88,11 +88,9 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
 
     // --- Bright-blue outlined building blocks lining the valley ---
     const buildingFaceMat = new THREE.MeshStandardMaterial({
-      color: 0x03101f,
-      transparent: true,
-      opacity: 0.4,
-      roughness: 0.8,
-      metalness: 0.15,
+      color: 0x000000,
+      roughness: 0.85,
+      metalness: 0.1,
     });
     const edgeMat = new THREE.LineBasicMaterial({
       color: BLUE,
@@ -131,14 +129,19 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
 
     // --- Bright-blue cube gateway ---
     const cubeGeo = new THREE.BoxGeometry(8.5, 8.5, 8.5);
-    const cubeMat = new THREE.MeshStandardMaterial({
+    const cubeMat = new THREE.MeshPhysicalMaterial({
       color: BLUE,
       emissive: BLUE_DEEP,
-      emissiveIntensity: 1.4,
-      roughness: 0.2,
-      metalness: 0.2,
+      emissiveIntensity: 0.4,
+      metalness: 0,
+      roughness: 0.06,
+      transmission: 1, // glass: refracts the scene behind it
+      thickness: 4,
+      ior: 1.45,
+      attenuationColor: new THREE.Color(BLUE),
+      attenuationDistance: 6,
       transparent: true,
-      opacity: 0.9,
+      opacity: 1,
       side: THREE.DoubleSide,
     });
     const cube = new THREE.Mesh(cubeGeo, cubeMat);
@@ -306,10 +309,11 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       cube.rotation.y = t * 0.26; // horizontal spin only
 
       const dissolve = smoothstep(progress, 0.15, 0.28);
-      cubeMat.opacity = (1 - dissolve) * 0.9;
+      cubeMat.opacity = 1 - dissolve;
+      cubeMat.transmission = 1 - dissolve;
       cube.visible = dissolve < 0.99;
-      cubeMat.emissiveIntensity = 1.3 + dissolve * 1.5 + Math.sin(t * 2) * 0.2;
-      cubeGlow.intensity = 3.5 + dissolve * 5 + Math.sin(t * 2) * 1;
+      cubeMat.emissiveIntensity = 0.35 + dissolve * 1.2 + Math.sin(t * 2) * 0.15;
+      cubeGlow.intensity = 3 + dissolve * 5 + Math.sin(t * 2) * 1;
 
       const spread = dissolve * 18;
       for (let i = 0; i < BURST; i += 1) {
