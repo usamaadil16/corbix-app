@@ -139,8 +139,7 @@ export function HomeExperience({
 
   const heroContent = (
     <div className="mx-auto w-full max-w-3xl px-4 text-center">
-      <p className="text-xs uppercase tracking-[0.3em] text-muted">Corbrix</p>
-      <h1 className="mt-4 font-display text-5xl leading-[1.05] text-white md:text-7xl">
+      <h1 className="font-display text-5xl leading-[1.05] text-white md:text-7xl">
         {heroHeadline}
       </h1>
       <p className="mx-auto mt-6 max-w-xl text-lg text-muted">{slogan}</p>
