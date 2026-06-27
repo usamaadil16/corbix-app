@@ -57,11 +57,13 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
 
     // --- Lighting (cool / blue) ---
     scene.add(new THREE.AmbientLight(0x223044, 1.2));
-    const key = new THREE.DirectionalLight(0xbfe6ff, 1.9);
-    key.position.set(-16, 28, 14);
+    // Key light kept near-overhead and centred so its specular reflects straight
+    // down onto the water beneath the cube rather than streaking off to one side.
+    const key = new THREE.DirectionalLight(0xbfe6ff, 1.7);
+    key.position.set(-3, 32, 20);
     scene.add(key);
-    const blueRim = new THREE.DirectionalLight(BLUE, 0.9);
-    blueRim.position.set(14, 8, -26);
+    const blueRim = new THREE.DirectionalLight(BLUE, 0.7);
+    blueRim.position.set(0, 14, -30);
     scene.add(blueRim);
 
     const disposables: Array<{ dispose: () => void }> = [];
@@ -407,7 +409,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       }
       cube.instanceMatrix.needsUpdate = true;
       cubeMat.emissiveIntensity = 0.55 + dissolve * 1.2 + Math.sin(t * 2) * 0.15;
-      cubeGlow.intensity = 3 + dissolve * 5 + Math.sin(t * 2) * 1;
+      cubeGlow.intensity = 5 + dissolve * 5 + Math.sin(t * 2) * 1;
 
       const spread = dissolve * 18;
       for (let i = 0; i < BURST; i += 1) {

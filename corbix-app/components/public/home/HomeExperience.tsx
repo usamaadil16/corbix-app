@@ -138,16 +138,16 @@ export function HomeExperience({
   };
 
   const heroContent = (
-    <div className="mx-auto w-full max-w-6xl px-4">
+    <div className="mx-auto w-full max-w-3xl px-4 text-center">
       <p className="text-xs uppercase tracking-[0.3em] text-muted">Corbrix</p>
-      <h1 className="mt-4 font-display text-5xl leading-[1.05] text-white md:text-8xl">
+      <h1 className="mt-4 font-display text-5xl leading-[1.05] text-white md:text-7xl">
         {heroHeadline}
       </h1>
-      <p className="mt-6 max-w-2xl text-lg text-muted">{slogan}</p>
+      <p className="mx-auto mt-6 max-w-xl text-lg text-muted">{slogan}</p>
       <Link
         href="#services"
         onClick={handleExploreServices}
-        className="pointer-events-auto mt-10 inline-flex w-fit rounded-lg border border-accent/40 px-5 py-2.5 text-sm text-accent transition-colors hover:bg-accent/10"
+        className="pointer-events-auto mt-8 inline-flex w-fit rounded-lg border border-accent/40 px-5 py-2.5 text-sm text-accent transition-colors hover:bg-accent/10"
       >
         Explore Services
       </Link>
@@ -285,7 +285,10 @@ export function HomeExperience({
           style={{ height: `${JOURNEY_SCREENS * 100}vh` }}
         >
           <div className="pointer-events-none sticky top-0 flex h-screen items-center overflow-hidden">
-            <div data-panel="hero" className="absolute inset-0 flex items-center">
+            <div
+              data-panel="hero"
+              className="absolute inset-0 flex items-end justify-center pb-24"
+            >
               {heroContent}
             </div>
             <div
