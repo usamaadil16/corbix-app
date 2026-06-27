@@ -329,6 +329,15 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       return lerp(10, VALLEY_END_Z, k);
     };
 
+    // Cursor parallax (smoothed).
+    const mouse = { x: 0, y: 0 };
+    const mouseTarget = { x: 0, y: 0 };
+    const onPointerMove = (e: PointerEvent) => {
+      mouseTarget.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseTarget.y = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("pointermove", onPointerMove);
+
     const tmp = new THREE.Vector3();
     const lookTarget = new THREE.Vector3();
     const start = performance.now();
@@ -336,10 +345,14 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
     const tick = () => {
       const t = (performance.now() - start) / 1000;
 
+      // Ease the smoothed cursor position toward the latest target.
+      mouse.x += (mouseTarget.x - mouse.x) * 0.06;
+      mouse.y += (mouseTarget.y - mouse.y) * 0.06;
+
       const camZ = cameraZForProgress(progress);
       camera.position.z = camZ;
-      camera.position.y = 6 + Math.sin(progress * Math.PI) * 1.5;
-      camera.position.x = Math.sin(progress * Math.PI * 3) * 1.2;
+      camera.position.y = 6 + Math.sin(progress * Math.PI) * 1.5 + mouse.y * 2;
+      camera.position.x = Math.sin(progress * Math.PI * 3) * 1.2 + mouse.x * 3.5;
       lookTarget.set(0, 4, camZ - 30);
       camera.lookAt(lookTarget);
 
@@ -410,6 +423,9 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       trailParticleMat.opacity = 0.4 + valleyProgress * 0.55;
 
       particles.rotation.y = t * 0.015;
+      // Particle field drifts with the cursor.
+      particles.position.x = mouse.x * 7;
+      particles.position.y = mouse.y * 4;
 
       renderer.render(scene, camera);
       frame = requestAnimationFrame(tick);
@@ -428,6 +444,7 @@ export function MountainWorld({ journeyScreens }: MountainWorldProps) {
       cancelAnimationFrame(frame);
       st.kill();
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("pointermove", onPointerMove);
       disposables.forEach((d) => d.dispose());
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) {
